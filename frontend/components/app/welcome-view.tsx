@@ -21,45 +21,56 @@ function WelcomeImage() {
 interface WelcomeViewProps {
   startButtonText: string;
   onStartCall: () => void;
+  status: 'ready' | 'connecting' | 'ended';
 }
 
 export const WelcomeView = ({
   startButtonText,
   onStartCall,
+  status,
   ref,
 }: React.ComponentProps<'div'> & WelcomeViewProps) => {
+  const isConnecting = status === 'connecting';
+  const hasEnded = status === 'ended';
+
   return (
-    <div ref={ref}>
-      <section className="bg-background flex flex-col items-center justify-center text-center">
+    <div ref={ref} className="relative min-h-svh overflow-hidden px-5 py-8 sm:px-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_32%),linear-gradient(135deg,transparent_45%,color-mix(in_oklab,var(--chart-4)_10%,transparent))]" />
+      <section className="relative mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-2xl flex-col items-center justify-center text-center">
         <WelcomeImage />
 
-        <p className="text-foreground max-w-prose pt-1 leading-6 font-medium">
-          Chat live with your voice AI agent
+        <p className="mb-3 text-xs font-bold tracking-[0.28em] text-primary uppercase">Krishi-Vani</p>
+        <h1 className="max-w-xl text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
+          Your AI Farming Assistant
+        </h1>
+        <p className="text-muted-foreground mt-5 max-w-md text-base leading-7 sm:text-lg">
+          Ask about crops, weather, pests, and everyday farm decisions in your own voice.
         </p>
+
+        {isConnecting && (
+          <p className="mt-8 flex items-center gap-2 text-sm font-medium text-primary" role="status">
+            <span className="size-2 animate-pulse rounded-full bg-primary" /> Connecting to Krishi-Vani...
+          </p>
+        )}
+        {hasEnded && (
+          <p className="mt-8 text-sm font-medium text-primary" role="status">
+            Your conversation has ended. Krishi-Vani is ready when you are.
+          </p>
+        )}
 
         <Button
           size="lg"
           onClick={onStartCall}
-          className="mt-6 w-64 rounded-full font-mono text-xs font-bold tracking-wider uppercase"
+          disabled={isConnecting}
+          className="mt-8 h-12 w-full max-w-xs rounded-full px-8 font-mono text-xs font-bold tracking-wider uppercase shadow-lg shadow-primary/20"
         >
-          {startButtonText}
+          {isConnecting ? 'Connecting...' : hasEnded ? 'Start Again' : startButtonText}
         </Button>
       </section>
 
-      <div className="fixed bottom-5 left-0 flex w-full items-center justify-center">
-        <p className="text-muted-foreground max-w-prose pt-1 text-xs leading-5 font-normal text-pretty md:text-sm">
-          Need help getting set up? Check out the{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.livekit.io/agents/start/voice-ai/"
-            className="underline"
-          >
-            Voice AI quickstart
-          </a>
-          .
-        </p>
-      </div>
+      <p className="text-muted-foreground absolute right-5 bottom-5 left-5 text-center text-xs leading-5 sm:right-8 sm:left-8">
+        Voice-first support for the people who grow our food.
+      </p>
     </div>
   );
 };

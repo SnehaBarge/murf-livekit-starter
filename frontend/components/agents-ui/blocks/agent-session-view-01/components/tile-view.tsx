@@ -130,7 +130,7 @@ export function TileLayout({
                     ...ANIMATION_TRANSITION,
                     delay: animationDelay,
                   }}
-                  className={cn('relative aspect-square h-[90px]')}
+                  className={cn('relative h-[90px] w-[90px] shrink-0 [contain:layout]')}
                 >
                   <AudioVisualizer
                     key="audio-visualizer"

@@ -33,9 +33,9 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG_DEFAULTS: AppConfig = {
-  companyName: 'Murf AI',
-  pageTitle: 'Voice Agent Starter',
-  pageDescription: 'A voice agent powered by Murf Falcon — the fastest TTS API',
+  companyName: 'Krishi-Vani',
+  pageTitle: 'Krishi-Vani | Your AI Farming Assistant',
+  pageDescription: 'Your AI farming assistant for practical, voice-first help in the field.',
 
   supportsChatInput: true,
   supportsVideoInput: true,
@@ -43,10 +43,15 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   isPreConnectBufferEnabled: true,
 
   logo: '/murf-logo.svg',
-  accent: '#6366F1',
+  accent: '#2f7d32',
   logoDark: '/murf-logo-dark.svg',
-  accentDark: '#818cf8',
-  startButtonText: 'Start talking',
+  accentDark: '#8bc34a',
+  startButtonText: 'Start conversation',
+
+  audioVisualizerType: 'aura',
+  audioVisualizerColor: '#5c9f3e',
+  audioVisualizerColorDark: '#a8d568',
+  audioVisualizerColorShift: 0.12,
 
   // optional: audio visualization configuration
   // audioVisualizerType: 'bar',

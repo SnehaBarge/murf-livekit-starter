@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSessionContext } from '@livekit/components-react';
+import { ConnectionState } from 'livekit-client';
 import type { AppConfig } from '@/app-config';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01';
 import { WelcomeView } from '@/components/app/welcome-view';
@@ -33,8 +35,14 @@ interface ViewControllerProps {
 }
 
 export function ViewController({ appConfig }: ViewControllerProps) {
-  const { isConnected, start } = useSessionContext();
+  const { connectionState, isConnected, start } = useSessionContext();
   const { resolvedTheme } = useTheme();
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const handleStartCall = () => {
+    setHasStarted(true);
+    void start();
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -44,7 +52,14 @@ export function ViewController({ appConfig }: ViewControllerProps) {
           key="welcome"
           {...VIEW_MOTION_PROPS}
           startButtonText={appConfig.startButtonText}
-          onStartCall={start}
+          onStartCall={handleStartCall}
+          status={
+            connectionState === ConnectionState.Connecting
+              ? 'connecting'
+              : hasStarted
+                ? 'ended'
+                : 'ready'
+          }
         />
       )}
       {/* Session view */}

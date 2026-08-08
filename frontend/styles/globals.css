@@ -6,20 +6,20 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --background: oklch(0.98 0.018 105);
+  --foreground: oklch(0.25 0.035 145);
+  --card: oklch(0.995 0.01 105);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.47 0.13 145);
+  --primary-foreground: oklch(0.985 0.01 105);
+  --secondary: oklch(0.93 0.045 105);
+  --secondary-foreground: oklch(0.3 0.06 145);
+  --muted: oklch(0.94 0.025 105);
+  --muted-foreground: oklch(0.48 0.045 145);
+  --accent: oklch(0.91 0.07 95);
+  --accent-foreground: oklch(0.3 0.06 145);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
