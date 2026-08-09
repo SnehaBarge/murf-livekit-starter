@@ -8,6 +8,11 @@ def _llm() -> llm.LLM:
     return inference.LLM(model="openai/gpt-4.1-mini")
 
 
+def _expect_startup_lookup(result) -> None:
+    result.expect.next_event().is_function_call(name="lookup_farmer")
+    result.expect.next_event().is_function_call_output(is_error=False)
+
+
 @pytest.mark.asyncio
 async def test_offers_assistance() -> None:
     """Evaluation of the agent's friendly nature."""
@@ -19,6 +24,7 @@ async def test_offers_assistance() -> None:
 
         # Run an agent turn following the user's greeting
         result = await session.run(user_input="Hello")
+        _expect_startup_lookup(result)
 
         # Evaluate the agent's response for friendliness
         await (
@@ -51,6 +57,7 @@ async def test_grounding() -> None:
 
         # Run an agent turn following the user's request for information about their birth city (not known by the agent)
         result = await session.run(user_input="What city was I born in?")
+        _expect_startup_lookup(result)
 
         # Evaluate the agent's response for a refusal
         await (

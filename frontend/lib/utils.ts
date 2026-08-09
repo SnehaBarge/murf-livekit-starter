@@ -5,6 +5,16 @@ import type { AppConfig } from '@/app-config';
 
 export const CONFIG_ENDPOINT = process.env.NEXT_PUBLIC_APP_CONFIG_ENDPOINT;
 export const SANDBOX_ID = process.env.SANDBOX_ID;
+const USER_ID_STORAGE_KEY = 'krishi-vani-user-id';
+
+function getPersistentUserId() {
+  const storedUserId = window.localStorage.getItem(USER_ID_STORAGE_KEY);
+  if (storedUserId) return storedUserId;
+
+  const userId = crypto.randomUUID();
+  window.localStorage.setItem(USER_ID_STORAGE_KEY, userId);
+  return userId;
+}
 
 export interface SandboxConfig {
   [key: string]:
@@ -114,6 +124,7 @@ export function getSandboxTokenSource(appConfig: AppConfig) {
         },
         body: JSON.stringify({
           room_config: roomConfig,
+          participant_identity: `voice_assistant_user_${getPersistentUserId()}`,
         }),
       });
       return await res.json();
@@ -121,5 +132,26 @@ export function getSandboxTokenSource(appConfig: AppConfig) {
       console.error('Error fetching connection details:', error);
       throw new Error('Error fetching connection details!');
     }
+  });
+}
+
+export function getTokenSource(appConfig: AppConfig) {
+  return TokenSource.custom(async () => {
+    const response = await fetch('/api/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        participant_identity: `voice_assistant_user_${getPersistentUserId()}`,
+        room_config: appConfig.agentName
+          ? { agents: [{ agentName: appConfig.agentName }] }
+          : undefined,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch LiveKit connection details.');
+    }
+
+    return response.json();
   });
 }

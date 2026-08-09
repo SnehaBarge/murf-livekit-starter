@@ -31,3 +31,6 @@ KMS
 
 # GitHub CLI
 .github/personal-instructions.md
+
+# Krishi-Vani local memory database
+krishi_vani_memory.db
