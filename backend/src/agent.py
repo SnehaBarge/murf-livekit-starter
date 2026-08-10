@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 
@@ -12,12 +13,13 @@ from livekit.agents import (
     RunContext,
     cli,
     function_tool,
-    inference,
-    tokenize,
     room_io,
+    tokenize,
 )
-from livekit.plugins import murf, silero, google, deepgram, noise_cancellation
+from livekit.plugins import deepgram, google, murf, noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
+
+from market_prices import lookup_market_price_data
 from prompts import SYSTEM_PROMPT
 
 try:
@@ -153,6 +155,32 @@ class Assistant(Agent):
             f"district={farmer['district'] or 'not provided'}; "
             f"irrigation type={farmer['irrigation_type'] or 'not provided'}; "
             f"last interaction={farmer['last_interaction']}."
+        )
+
+    @function_tool
+    async def lookup_market_price(
+        self, context: RunContext, crop: str, district: str
+    ) -> str:
+        """Look up the latest available Agmarknet mandi price for a crop and district.
+
+        Use this for current or latest market-price questions. Never estimate a
+        price when Agmarknet returns an error or no matching data.
+        """
+        logger.info(
+            "lookup_market_price called: crop=%s district=%s", crop, district
+        )
+        result = lookup_market_price_data(crop, district)
+        if result["status"] == "OK":
+            return json.dumps(result, ensure_ascii=True)
+        return json.dumps(
+            {
+                **result,
+                "instruction": (
+                    "Tell the farmer that the latest market price could not be "
+                    "retrieved. Do not provide or estimate a price."
+                ),
+            },
+            ensure_ascii=True,
         )
 
     @function_tool

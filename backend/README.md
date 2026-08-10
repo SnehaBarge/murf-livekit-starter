@@ -10,6 +10,13 @@ User speaks → [Deepgram STT] → text → [Gemini LLM] → response → [Murf 
 
 LiveKit handles the real-time audio transport. The agent connects to LiveKit as a participant, listens for user speech, and responds with synthesized audio.
 
+## Day 5: Live Market Prices
+
+Krishi-Vani now includes a `lookup_market_price` tool backed by Agmarknet 2.0
+public market data. Returned prices are tied to the date supplied by Agmarknet,
+and an API failure or no-data response produces a spoken fallback instead of a
+hallucinated price.
+
 ## Setup
 
 ### 1. Install dependencies
